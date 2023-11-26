@@ -287,6 +287,9 @@ button:disabled {
 }
 
 .loading {
+  position: absolute;
+  top: 55%;
+  right: 45%;
   width: 6rem;
   height: 6rem;
   border: 5px solid var(--grey-400);

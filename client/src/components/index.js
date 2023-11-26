@@ -9,3 +9,4 @@ export { default as SearchContainer } from "./SearchContainer";
 export { default as SubmitBtn } from "./SubmitBtn";
 export { default as ChartsContainer } from "./ChartsContainer";
 export { default as StatsContainer } from "./StatContainer";
+export { default as Loading } from "./Loading";
