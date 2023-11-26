@@ -9,22 +9,26 @@ import { FormRow, FormRowSelect, SubmitBtn } from "../components";
 import { toast } from "react-toastify";
 import { JOB_STATUS, JOB_TYPE } from "../../../utils/constants";
 import customFetch from "../utils/customFetch";
+import { QueryClient } from "@tanstack/react-query";
 
-export const action = async ({ request }) => {
-  try {
-    const formData = await request.formData();
-    const data = Object.fromEntries(formData);
+export const action =
+  (QueryClient) =>
+  async ({ request }) => {
+    try {
+      const formData = await request.formData();
+      const data = Object.fromEntries(formData);
 
-    await customFetch.post("/jobs", data);
-    toast.success("Job added successfully");
+      await customFetch.post("/jobs", data);
+      QueryClient.invalidateQueries(["jobs", "stats"]);
+      toast.success("Job added successfully");
 
-    return redirect("/dashboard/all-jobs");
-  } catch (error) {
-    toast.error(error?.response?.data?.msg);
-    return error;
-  }
-  return null;
-};
+      return redirect("/dashboard/all-jobs");
+    } catch (error) {
+      toast.error(error?.response?.data?.msg);
+      return error;
+    }
+    return null;
+  };
 
 const AddJobs = () => {
   const { user } = useOutletContext();

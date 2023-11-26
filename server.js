@@ -8,6 +8,8 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import path from "path";
 import cloudinary from "cloudinary";
+import helmet from "helmet";
+import mongoSanitize from "express-mongo-sanitize";
 
 // ROuters
 import jobRouter from "./routes/jobRouter.js";
@@ -28,28 +30,22 @@ cloudinary.config({
   api_key: process.env.CLOUD_API_KEY,
   api_secret: process.env.CLOUD_API_SECRET,
 });
-
-app.use(cookieParser());
-app.use(express.json());
-app.use(express.static(path.resolve(__dirname, "./client/dist")));
-
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-app.get("/api/v1/test", (req, res) => {
-  console.log(res.status);
-  res.status(200).json({ msg: "test route" });
-});
+app.use(express.static(path.resolve(__dirname, "./client/dist")));
+app.use(cookieParser());
+app.use(express.json());
+app.use(helmet());
+app.use(mongoSanitize());
 
 /////////////////////////////////////////////
 /////////////////////////////////////////////
 // Routers
 /////////////////////////////////////////////
 /////////////////////////////////////////////
+
 app.use("/api/jobs", authenticateUser, jobRouter);
 
 app.use("/api/users", authenticateUser, userRouter);
